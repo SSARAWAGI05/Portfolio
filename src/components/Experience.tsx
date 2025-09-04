@@ -72,9 +72,9 @@ const ExperienceSection: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        <div className="relative max-w-4xl mx-auto">
+        <div className="relative max-w-4xl mx-auto flex flex-col space-y-12">
           {/* Quantum Timeline */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-neon-500 via-cyber-500 via-electric-500 to-matrix-500 rounded-full animate-pulse"></div>
+          <div className="absolute top-0 left-4 sm:left-1/2 sm:-translate-x-1/2 w-1 h-full bg-gradient-to-b from-neon-500 via-cyber-500 via-electric-500 to-matrix-500 rounded-full animate-pulse"></div>
 
           {experiences.map((experience, index) => {
             const colors = getTypeColor(experience.type);
@@ -84,7 +84,7 @@ const ExperienceSection: React.FC = () => {
                 direction={index % 2 === 0 ? 'left' : 'right'}
                 delay={400 + index * 200}
               >
-                <div className={`flex items-center mb-16 ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} relative group`}>
+                <div className={`flex flex-col sm:flex-row items-center mb-16 relative group ${index % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}>
                 {/* Timeline Node */}
                 <div className="absolute left-1/2 transform -translate-x-1/2 z-10">
                   <div className={`w-16 h-16 bg-gradient-to-r ${colors.bg} rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-2xl transition-all duration-300 animate-cyber-pulse border-4 border-void-900`}>
@@ -93,7 +93,7 @@ const ExperienceSection: React.FC = () => {
                 </div>
 
                 {/* Content Card */}
-                <div className={`w-5/12 ${index % 2 === 0 ? 'pr-12' : 'pl-12'}`}>
+                <div className={`w-full sm:w-5/12 ${index % 2 === 0 ? 'sm:pr-12' : 'sm:pl-12'} mt-6 sm:mt-0`}>
                   <div className={`bg-void-800/50 backdrop-blur-sm border ${colors.border} rounded-2xl p-6 hover:bg-void-800/70 transition-all duration-500 hover:shadow-xl hover:shadow-neon-500/10 group-hover:border-neon-500/60`}>
                     <div className="flex items-start justify-between mb-4">
                       <div>
@@ -132,7 +132,7 @@ const ExperienceSection: React.FC = () => {
                 </div>
 
                 {/* Empty space for alternating layout */}
-                <div className="w-5/12"></div>
+                <div className="hidden sm:block w-5/12"></div>
                 </div>
               </ScrollReveal>
             );
@@ -146,7 +146,7 @@ const ExperienceSection: React.FC = () => {
               CERTIFICATION_<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400">REGISTRY</span>
             </h3>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {[
                 {
                   title: 'Oracle AI Vector Search Certified Professional',

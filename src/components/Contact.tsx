@@ -66,20 +66,20 @@ const Contact: React.FC = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white font-cyber">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-cyber">
             INITIATE{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400 animate-glow">
               CONTACT
             </span>
           </h2>
           <div className="w-32 h-1 bg-gradient-to-r from-neon-500 via-cyber-500 to-electric-500 mx-auto mt-6 mb-8 animate-pulse"></div>
-          <p className="text-lg md:text-xl text-cyber-300 max-w-2xl mx-auto font-matrix">
+          <p className="text-base sm:text-lg md:text-xl text-cyber-300 max-w-2xl mx-auto font-matrix">
             &gt; Ready to collaborate on innovative AI projects? Let’s connect!
           </p>
         </div>
 
         {/* Grid Layout */}
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Left Column - Form */}
           <div className="bg-void-800/50 border border-neon-500/30 rounded-2xl shadow-lg overflow-hidden hover:border-neon-500/60 transition-all">
             {/* Terminal Header */}
@@ -98,7 +98,7 @@ const Contact: React.FC = () => {
             </div>
 
             {/* Terminal Output + Form */}
-            <div className="p-8">
+            <div className="p-6 sm:p-8">
               {/* Terminal Messages */}
               <div className="mb-6 bg-void-900/50 rounded-lg p-4 font-matrix text-sm">
                 {terminalOutput.map((line, index) => (
@@ -235,7 +235,7 @@ const Contact: React.FC = () => {
                 <Terminal className="w-5 h-5 mr-3 text-electric-400" />
                 SOCIAL_NETWORK
               </h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <SocialLink
                   href="https://github.com/SSARAWAGI05"
                   icon={<Github className="w-8 h-8 text-neon-400 mx-auto" />}

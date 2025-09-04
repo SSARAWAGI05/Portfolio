@@ -38,9 +38,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
   }, [onComplete, currentStep]);
 
   if (!isVisible) {
-    return (
-      <div className="fixed inset-0 bg-gradient-to-br from-void-900 via-surface-900 to-void-900 z-50 flex items-center justify-center opacity-0 transition-opacity duration-800 pointer-events-none" />
-    );
+    return null;
   }
 
   return (

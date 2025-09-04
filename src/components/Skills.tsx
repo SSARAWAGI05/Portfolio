@@ -380,11 +380,11 @@ const EnhancedSkills: React.FC = () => {
   );
 
   return (
-    <section id="skills" className="relative py-20 bg-gradient-to-br from-surface-900 via-void-800 to-surface-900 overflow-hidden lg:pl-24">
+    <section id="skills" className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-surface-900 via-void-800 to-surface-900 overflow-hidden px-4 sm:px-6 lg:pl-24">
       {/* Enhanced Background Effects */}
       <canvas
         ref={canvasRef}
-        className={`absolute inset-0 ${particleSystem ? 'opacity-25' : 'opacity-0'} transition-opacity duration-500`}
+        className={`absolute inset-0 w-full h-full ${particleSystem ? 'opacity-25' : 'opacity-0'} transition-opacity duration-500`}
         style={{ pointerEvents: 'none' }}
       />
       
@@ -398,7 +398,7 @@ const EnhancedSkills: React.FC = () => {
           <div className="text-center mb-20">
             <div className="flex justify-center items-center mb-6">
               <Activity className="w-8 h-8 text-neon-400 mr-4 animate-pulse" />
-              <h2 className="text-5xl md:text-6xl font-bold text-white font-cyber">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white font-cyber">
                 TECHNICAL_<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 via-cyan-400 to-purple-400 animate-gradient-x">ARSENAL</span>
               </h2>
               <Sparkles className="w-8 h-8 text-electric-400 ml-4 animate-pulse" />
@@ -420,7 +420,7 @@ const EnhancedSkills: React.FC = () => {
         </ScrollReveal>
 
         {/* Enhanced Skills Grid */}
-        <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-20">
           {skillCategories.map((category, index) => {
             const colorClasses = getColorClasses(category.color);
             const isActive = activeCategory === category.title;
@@ -586,7 +586,7 @@ const EnhancedSkills: React.FC = () => {
                 return (
                   <div 
                     key={item.year}
-                    className={`flex items-center mb-16 ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} relative group`}
+                    className={`flex flex-col md:flex-row items-center mb-16 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} relative group`}
                   >
                     {/* Enhanced Timeline Node */}
                     <div className="absolute left-1/2 transform -translate-x-1/2 z-10">
@@ -601,7 +601,7 @@ const EnhancedSkills: React.FC = () => {
                     </div>
 
                     {/* Enhanced Content Card */}
-                    <div className={`w-5/12 ${index % 2 === 0 ? 'pr-16' : 'pl-16'}`}>
+                    <div className={`w-full md:w-5/12 ${index % 2 === 0 ? 'md:pr-16' : 'md:pl-16'} mt-8 md:mt-0`}>
                       <div className={`bg-void-800/50 backdrop-blur-sm border ${colorClasses.border} rounded-2xl p-8 hover:bg-void-800/70 transition-all duration-500 ${colorClasses.glow} group-hover:scale-105`}>
                         <div className="flex items-center justify-between mb-4">
                           <h4 className={`text-xl font-bold ${colorClasses.text} font-cyber`}>
@@ -636,7 +636,7 @@ const EnhancedSkills: React.FC = () => {
                     </div>
 
                     {/* Empty space for alternating layout */}
-                    <div className="w-5/12" />
+                    <div className="hidden md:block w-5/12" />
                   </div>
                 );
               })}
@@ -651,7 +651,7 @@ const EnhancedSkills: React.FC = () => {
               IMPACT_<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">HIGHLIGHTS</span>
             </h3>
           
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 { 
                   label: "Projects Deployed", 

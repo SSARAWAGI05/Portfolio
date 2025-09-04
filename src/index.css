@@ -60,3 +60,8 @@ html {
     scroll-behavior: auto;
   }
 }
+
+html, body {
+  background-color: #030712; /* dark slate (close to void-900) */
+  color: #ffffff;
+}

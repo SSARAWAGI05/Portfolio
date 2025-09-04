@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, User, Code, Briefcase, Award, Mail, Sun, Moon, Menu, X, ChevronUp } from 'lucide-react';
+import { Home, User, Code, Briefcase, Award, Mail, Sun, Moon, Menu, X, ChevronUp, Users, Trophy } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 // Import your logo (if in src/assets)
@@ -21,7 +21,7 @@ const Navigation: React.FC = () => {
       setIsScrolled(scrollPosition > 100);
       setScrollProgress(progress);
 
-      const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
+      const sections = ['home', 'about', 'skills', 'projects', 'experience', 'clubs', 'achievements', 'contact'];
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -47,6 +47,8 @@ const Navigation: React.FC = () => {
     { name: 'Skills', href: '#skills', icon: Code },
     { name: 'Projects', href: '#projects', icon: Briefcase },
     { name: 'Experience', href: '#experience', icon: Award },
+    { name: 'Clubs', href: '#clubs', icon: Users }, 
+    { name: 'Achievements', href: '#achievements', icon: Trophy },
     { name: 'Contact', href: '#contact', icon: Mail }
   ];
 

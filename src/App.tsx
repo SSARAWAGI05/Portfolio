@@ -8,6 +8,8 @@ import About from './components/About';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Experience from './components/Experience';
+import ClubsSection from './components/ClubsSection'; // Import the new ClubsSection
+import AchievementsSection from './components/AchievementsSection';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -20,7 +22,7 @@ function App() {
 
   // 🔹 Function to run the guided tour
   const startTour = async () => {
-    const sectionIds = ["home", "about", "skills", "projects", "experience", "contact"];
+    const sectionIds = ["home", "about", "skills", "projects", "experience", "clubs", "contact"];
     
     for (let i = 0; i < sectionIds.length; i++) {
       const element = document.getElementById(sectionIds[i]);
@@ -54,6 +56,8 @@ function App() {
                 <Skills />
                 <Projects />
                 <Experience />
+                <ClubsSection /> {/* Add the ClubsSection component */}
+                <AchievementsSection />
                 <Contact />
               </main>
               <Footer />

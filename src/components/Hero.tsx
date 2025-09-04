@@ -104,7 +104,7 @@ const Hero: React.FC<{ onStartTour?: () => void }> = ({ onStartTour }) => {
                 {/* Name & Identity Info */}
                 <div className="flex-1 text-center lg:text-left space-y-6">
                   {/* Name & Title */}
-                  <div className="space-y-4">
+                  <div className="space-y-4 text-center">
                     <h1 className="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight">
                       <span className="block text-white font-cyber tracking-wider mb-2">
                         SHUBAM
@@ -117,7 +117,7 @@ const Hero: React.FC<{ onStartTour?: () => void }> = ({ onStartTour }) => {
                     {/* Animated Subtitle */}
                     <div className="space-y-3">
                       <p className="text-xl lg:text-2xl xl:text-3xl text-neon-400 font-matrix typing-text">
-                        &gt; ML_ENGINEER.initialize()
+                         ML_ENGINEER.initialize()
                       </p>
                       <p className="text-base lg:text-lg xl:text-xl text-cyber-300 font-light max-w-2xl lg:max-w-none">
                         Building AI-Powered Solutions for Tomorrow

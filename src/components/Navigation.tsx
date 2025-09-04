@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Home, User, Code, Briefcase, Award, Mail, Sun, Moon, Zap, Menu, X, ChevronUp } from 'lucide-react';
+import { Home, User, Code, Briefcase, Award, Mail, Sun, Moon, Menu, X, ChevronUp } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+
+// Import your logo (if in src/assets)
+import Logo from '/ganeshji.jpg'; // adjust path if needed
 
 const Navigation: React.FC = () => {
   const [activeSection, setActiveSection] = useState('home');
@@ -14,11 +17,10 @@ const Navigation: React.FC = () => {
       const scrollPosition = window.scrollY;
       const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = Math.min(100, (scrollPosition / documentHeight) * 100);
-      
+
       setIsScrolled(scrollPosition > 100);
       setScrollProgress(progress);
 
-      // Enhanced section detection with offset
       const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
@@ -28,12 +30,12 @@ const Navigation: React.FC = () => {
         }
         return false;
       });
-      
+
       if (currentSection) {
         setActiveSection(currentSection);
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
@@ -58,27 +60,28 @@ const Navigation: React.FC = () => {
 
   return (
     <>
-      {/* Minimal Desktop Navigation */}
+      {/* Desktop Navigation */}
       <nav
         className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden lg:block transition-all duration-300 ${
           isScrolled ? 'translate-y-0' : 'translate-y-2'
         }`}
       >
         <div className="relative">
-          <div className={`
+          <div
+            className={`
             relative px-6 py-3 rounded-xl backdrop-blur-md border
-            ${isScrolled 
-              ? 'bg-black/70 border-neon-500/20' 
-              : 'bg-black/50 border-gray-600/10'
-            }
-          `}>
+            ${isScrolled ? 'bg-black/70 border-neon-500/20' : 'bg-black/50 border-gray-600/10'}
+          `}
+          >
             <div className="relative flex items-center space-x-1">
               {/* Logo */}
               <div className="flex items-center space-x-2 mr-4 pr-4 border-r border-gray-600/20">
-                <div className="w-8 h-8 bg-gradient-to-r from-neon-500 to-cyber-500 rounded-lg flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-white font-medium text-sm tracking-wider">.</span>
+                <img
+                  src="/ganeshji.jpg"
+                  alt="Logo"
+                  className="w-8 h-8 object-contain rounded-lg"
+                />
+                <span className="text-white font-medium text-sm tracking-wider"></span>
               </div>
 
               {/* Navigation Items */}
@@ -93,16 +96,12 @@ const Navigation: React.FC = () => {
                         onClick={() => scrollToSection(item.href)}
                         className={`
                           relative px-3 py-2 rounded-lg transition-all duration-200 flex items-center space-x-1
-                          ${isActive
-                            ? 'text-neon-400'
-                            : 'text-gray-400 hover:text-white'
-                          }
+                          ${isActive ? 'text-neon-400' : 'text-gray-400 hover:text-white'}
                         `}
                       >
                         <Icon className="w-4 h-4" />
                         <span className="text-xs tracking-wide">{item.name}</span>
-                        
-                        {/* Active indicator */}
+
                         {isActive && (
                           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-neon-400 rounded-full" />
                         )}
@@ -130,26 +129,27 @@ const Navigation: React.FC = () => {
         </div>
       </nav>
 
-      {/* Minimal Mobile Navigation */}
+      {/* Mobile Navigation */}
       <nav
         className={`fixed top-4 left-4 right-4 z-50 lg:hidden transition-all duration-300 ${
           isScrolled ? 'translate-y-0' : 'translate-y-1'
         }`}
       >
-        <div className={`
+        <div
+          className={`
           relative px-4 py-3 rounded-xl backdrop-blur-md border transition-all duration-300
-          ${isScrolled 
-            ? 'bg-black/70 border-neon-500/20' 
-            : 'bg-black/50 border-gray-600/10'
-          }
-        `}>
+          ${isScrolled ? 'bg-black/70 border-neon-500/20' : 'bg-black/50 border-gray-600/10'}
+        `}
+        >
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center space-x-2">
-              <div className="w-7 h-7 bg-gradient-to-r from-neon-500 to-cyber-500 rounded-lg flex items-center justify-center">
-                <Zap className="w-3 h-3 text-white" />
-              </div>
-              <span className="text-white font-medium text-sm tracking-wider">.</span>
+              <img
+                src="/ganeshji.jpg"
+                alt="Logo"
+                className="w-7 h-7 object-contain rounded-lg"
+              />
+              <span className="text-white font-medium text-sm tracking-wider"></span>
             </div>
 
             {/* Mobile Menu Button */}
@@ -165,7 +165,7 @@ const Navigation: React.FC = () => {
             </button>
           </div>
 
-          {/* Mobile Menu Dropdown */}
+          {/* Mobile Dropdown */}
           {isMobileMenuOpen && (
             <div className="mt-3 pt-3 border-t border-gray-600/20 space-y-1">
               {navItems.map((item) => {
@@ -178,10 +178,7 @@ const Navigation: React.FC = () => {
                     onClick={() => scrollToSection(item.href)}
                     className={`
                       w-full flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200
-                      ${isActive
-                        ? 'text-neon-400'
-                        : 'text-gray-400 hover:text-white'
-                      }
+                      ${isActive ? 'text-neon-400' : 'text-gray-400 hover:text-white'}
                     `}
                   >
                     <Icon className="w-4 h-4" />
@@ -213,7 +210,7 @@ const Navigation: React.FC = () => {
         </div>
       </nav>
 
-      {/* Minimal Progress Indicator */}
+      {/* Scroll Progress */}
       <div className="fixed top-0 left-0 w-full h-0.5 bg-transparent z-40">
         <div
           className="h-full bg-gradient-to-r from-neon-500 to-cyber-500 transition-all duration-300 ease-out"
@@ -221,7 +218,7 @@ const Navigation: React.FC = () => {
         />
       </div>
 
-      {/* Minimal Scroll to Top Button */}
+      {/* Scroll to Top */}
       {isScrolled && (
         <button
           onClick={() => scrollToSection('#home')}

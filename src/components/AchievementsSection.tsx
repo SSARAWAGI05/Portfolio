@@ -13,15 +13,6 @@ interface Achievement {
   verificationLink?: string;
 }
 
-const getTypeGradient = (type: string) => {
-  switch (type) {
-    case "hackathon": return "from-cyan-500 to-blue-500";
-    case "academic": return "from-orange-500 to-red-500";
-    case "leadership": return "from-green-500 to-teal-500";
-    case "competition": return "from-purple-500 to-pink-500";
-    default: return "from-cyber-500 to-cyber-600";
-  }
-};
 const AchievementsSection: React.FC = () => {
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>('all');
@@ -152,6 +143,16 @@ const AchievementsSection: React.FC = () => {
     }
   };
 
+  const getTypeColor = (type: Achievement['type']) => {
+    switch (type) {
+      case 'hackathon': return 'text-cyan-400';
+      case 'academic': return 'text-orange-400';
+      case 'leadership': return 'text-green-400';
+      case 'competition': return 'text-purple-400';
+      default: return 'text-gray-400';
+    }
+  };
+
   const handleCardHover = (achievementId: string, event: React.MouseEvent) => {
     if (previewTimeoutRef.current) {
       clearTimeout(previewTimeoutRef.current);
@@ -161,7 +162,7 @@ const AchievementsSection: React.FC = () => {
     if (achievement?.certificateImage) {
       previewTimeoutRef.current = setTimeout(() => {
         setHoveredAchievement(achievementId);
-      }, 300); // 300ms delay for smooth experience
+      }, 300);
     }
   };
 
@@ -172,7 +173,7 @@ const AchievementsSection: React.FC = () => {
     
     previewTimeoutRef.current = setTimeout(() => {
       setHoveredAchievement(null);
-    }, 150); // Small delay to prevent flickering
+    }, 150);
   };
 
   const filters = [
@@ -192,7 +193,7 @@ const AchievementsSection: React.FC = () => {
   const openCertificateViewer = (imageUrl: string) => {
     const index = certificateImages.indexOf(imageUrl);
     setPreviewIndex(index >= 0 ? index : 0);
-    setHoveredAchievement(null); // Close hover preview
+    setHoveredAchievement(null);
   };
 
   const closeCertificateViewer = () => {
@@ -224,33 +225,47 @@ const AchievementsSection: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [previewIndex]);
 
-  // Get the hovered achievement's certificate
   const hoveredCertificate = hoveredAchievement 
     ? achievements.find(a => a.id === hoveredAchievement)?.certificateImage 
     : null;
 
   return (
-    <section id="achievements" className="relative min-h-screen py-24 bg-gradient-to-br from-surface-900 via-void-800 to-surface-900 overflow-hidden">
-    {/* Background Grid */}
-    <div className="absolute inset-0 bg-cyber-grid opacity-10" />
-
-      {/* Minimal Background */}
+    <section 
+      ref={sectionRef}
+      id="achievements" 
+      className="relative min-h-screen py-24 bg-gradient-to-br from-surface-900 via-void-800 to-surface-900 overflow-hidden"
+    >
+      {/* Background Grid */}
+      <div className="absolute inset-0 bg-cyber-grid opacity-10" />
+      {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-green-500/3 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2" />
+        
+        {/* Grid Pattern */}
+        <div 
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(34, 211, 238, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(34, 211, 238, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px'
+          }}
+        />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
-        {/* Minimal Header */}
+        {/* Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-4xl md:text-5xl font-cyber text-white mb-4 font-cyber">
-            ACHIEV<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400 animate-glow">EMENTS</span>
+          <h2 className="text-4xl md:text-5xl font-cyber text-white mb-4 tracking-wider">
+            ACHIEV<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 animate-pulse">EMENTS</span>
           </h2>
-          <div className="w-32 h-1 bg-gradient-to-r from-neon-500 via-cyber-500 to-electric-500 mx-auto mb-8 animate-pulse"></div>
+          <div className="w-32 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-blue-500 mx-auto mb-8 animate-pulse"></div>
         </div>
 
-        {/* Clean Filter Pills */}
+        {/* Filter Pills */}
         <div className={`flex flex-wrap justify-center gap-3 mb-16 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           {filters.map((filter) => {
             const IconComponent = filter.icon;
@@ -261,13 +276,13 @@ const AchievementsSection: React.FC = () => {
               <button
                 key={filter.id}
                 onClick={() => setActiveFilter(filter.id)}
-                className={`group relative px-5 py-2.5 rounded-full transition-all duration-300 ${
+                className={`group relative px-5 py-2.5 rounded-full transition-all duration-300 hover:scale-105 ${
                   isActive
-                    ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/50 text-cyan-300'
-                    : 'border border-gray-700 text-gray-400 hover:text-cyan-600 hover:text-gray-300'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/50 text-cyan-300 shadow-lg shadow-cyan-500/25'
+                    : 'border border-gray-700 text-gray-400 hover:text-cyan-400 hover:border-cyan-400/50'
                 }`}
               >
-                <div className="flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-2 text-sm font-cyber">
                   <IconComponent className="w-4 h-4" />
                   <span>{filter.label}</span>
                   <span className={`px-2 py-0.5 rounded-full text-xs ${
@@ -284,7 +299,7 @@ const AchievementsSection: React.FC = () => {
           })}
         </div>
 
-        {/* Featured Achievements - Minimalist Cards */}
+        {/* Featured Achievements */}
         {activeFilter === 'all' && (
           <div className={`mb-20 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex items-center gap-4 mb-12">
@@ -306,10 +321,10 @@ const AchievementsSection: React.FC = () => {
                 >
                   <div className={`absolute -inset-0.5 bg-gradient-to-r ${getTypeGradient(achievement.type)} rounded-2xl opacity-0 group-hover:opacity-20 blur transition-all duration-500`} />
                   
-                  <div className="bg-void-800/50 backdrop-blur-sm border border-void-600 rounded-2xl p-6 hover:bg-void-800/70 transition-all duration-500 hover:shadow-xl hover:shadow-neon-500/10 group">
+                  <div className="relative bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-500 hover:shadow-xl hover:shadow-cyan-500/10 group-hover:-translate-y-2">
                     {/* Header */}
                     <div className="flex items-start justify-between mb-6">
-                      <div className={`p-3 rounded-xl bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-20`}>
+                      <div className={`p-3 rounded-xl bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-20 ${getTypeColor(achievement.type)}`}>
                         {getIcon(achievement.type)}
                       </div>
                       
@@ -322,7 +337,7 @@ const AchievementsSection: React.FC = () => {
                         {achievement.certificateImage && (
                           <button 
                             onClick={() => openCertificateViewer(achievement.certificateImage!)}
-                            className="p-2 border border-gray-700 rounded-lg text-gray-400 hover:text-cyan-400 hover:border-cyan-400/50 transition-all duration-300"
+                            className="p-2 border border-gray-700 rounded-lg text-gray-400 hover:text-cyan-400 hover:border-cyan-400/50 transition-all duration-300 hover:scale-110"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
@@ -332,7 +347,7 @@ const AchievementsSection: React.FC = () => {
 
                     {/* Content */}
                     <div className="space-y-4">
-                      <h3 className="text-2xl font-cyber font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-blue-400 transition-all duration-500">
+                      <h3 className="text-2xl font-cyber text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-blue-400 transition-all duration-500">
                         {achievement.title}
                       </h3>
                       
@@ -347,8 +362,7 @@ const AchievementsSection: React.FC = () => {
 
                       {/* Type Badge */}
                       <div className="pt-4">
-                        <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-10 border border-current text-sm`}
-                              style={{ color: `rgb(${achievement.type === 'hackathon' ? '34, 211, 238' : achievement.type === 'academic' ? '251, 146, 60' : achievement.type === 'leadership' ? '52, 211, 153' : '168, 85, 247'})` }}>
+                        <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-10 border ${getTypeColor(achievement.type)} text-sm font-cyber`}>
                           {getIcon(achievement.type)}
                           {achievement.type.toUpperCase()}
                         </span>
@@ -361,7 +375,7 @@ const AchievementsSection: React.FC = () => {
           </div>
         )}
 
-        {/* All Achievements - Clean Grid */}
+        {/* All Achievements Grid */}
         <div className={`transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAchievements.filter(a => !a.featured || activeFilter !== 'all').map((achievement, index) => (
@@ -374,17 +388,17 @@ const AchievementsSection: React.FC = () => {
               >
                 <div className={`absolute -inset-0.5 bg-gradient-to-r ${getTypeGradient(achievement.type)} rounded-xl opacity-0 group-hover:opacity-10 transition-all duration-500`} />
                 
-                <div className="relative bg-gray-900/30 backdrop-blur-sm border border-gray-800/50 rounded-xl p-6 group-hover:text-cyan-700/50 transition-all duration-500 group-hover:-translate-y-1">
+                <div className="relative bg-gray-900/30 backdrop-blur-sm border border-gray-800/50 rounded-xl p-6 hover:border-gray-700/50 transition-all duration-500 group-hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-900/50">
                   {/* Type Icon */}
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`p-2.5 rounded-lg bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-20`}>
+                    <div className={`p-2.5 rounded-lg bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-20 ${getTypeColor(achievement.type)}`}>
                       {getIcon(achievement.type)}
                     </div>
                     
                     {achievement.certificateImage && (
                       <button 
                         onClick={() => openCertificateViewer(achievement.certificateImage!)}
-                        className="p-2 text-gray-500 hover:text-cyan-400 transition-colors duration-300"
+                        className="p-2 text-gray-500 hover:text-cyan-400 transition-colors duration-300 hover:scale-110"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
@@ -393,7 +407,7 @@ const AchievementsSection: React.FC = () => {
 
                   {/* Content */}
                   <div className="space-y-3">
-                    <h4 className="text-lg font-cyber font-bold text-white leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-blue-400 transition-all duration-300">
+                    <h4 className="text-lg font-cyber text-white leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-blue-400 transition-all duration-300">
                       {achievement.title}
                     </h4>
 
@@ -414,11 +428,7 @@ const AchievementsSection: React.FC = () => {
 
                     {/* Bottom Badge */}
                     <div className="pt-3">
-                      <span className={`px-2 py-1 text-xs font-cyber rounded-md bg-gradient-to-r ${getTypeGradient(achievement.type)} text-black`}
-                            style={{ 
-                              color: `rgb(${achievement.type === 'hackathon' ? '34, 211, 238' : achievement.type === 'academic' ? '251, 146, 60' : achievement.type === 'leadership' ? '52, 211, 153' : '168, 85, 247'})`,
-                              borderColor: `rgb(${achievement.type === 'hackathon' ? '34, 211, 238' : achievement.type === 'academic' ? '251, 146, 60' : achievement.type === 'leadership' ? '52, 211, 153' : '168, 85, 247'}, 0.3)`
-                            }}>
+                      <span className={`px-2 py-1 text-xs font-cyber rounded-md bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-10 border ${getTypeColor(achievement.type)}`}>
                         {achievement.type.toUpperCase()}
                       </span>
                     </div>
@@ -454,7 +464,8 @@ const AchievementsSection: React.FC = () => {
           style={{
             left: `${Math.min(previewPosition.x + 20, window.innerWidth - 320)}px`,
             top: `${Math.min(previewPosition.y - 120, window.innerHeight - 240)}px`,
-            transform: hoveredCertificate ? 'scale(1) opacity(1)' : 'scale(0.9) opacity(0)'
+            opacity: hoveredCertificate ? 1 : 0,
+            transform: hoveredCertificate ? 'scale(1)' : 'scale(0.9)'
           }}
         >
           <div className="relative">
@@ -468,10 +479,6 @@ const AchievementsSection: React.FC = () => {
                   src={hoveredCertificate}
                   alt="Certificate Preview"
                   className="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iMjAiIHN0cm9rZT0iIzIyZDNlZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTQwIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNmI3Mjg5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DZXJ0aWZpY2F0ZSBQcmV2aWV3PC90ZXh0Pgo8L3N2Zz4=';
-                  }}
                 />
                 
                 {/* Overlay with click hint */}
@@ -498,7 +505,7 @@ const AchievementsSection: React.FC = () => {
           {/* Close Button */}
           <button 
             onClick={closeCertificateViewer}
-            className="absolute top-6 right-6 p-2 text-gray-400 hover:text-white transition-colors z-10 border border-gray-700 rounded-lg hover:text-cyan-600"
+            className="absolute top-6 right-6 p-2 text-gray-400 hover:text-white transition-colors z-10 border border-gray-700 rounded-lg hover:border-cyan-400"
           >
             <X className="w-6 h-6" />
           </button>
@@ -506,14 +513,14 @@ const AchievementsSection: React.FC = () => {
           {/* Navigation Buttons */}
           <button 
             onClick={prevCertificate}
-            className="absolute left-6 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors border border-gray-700 rounded-lg hover:text-cyan-600 z-10"
+            className="absolute left-6 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors border border-gray-700 rounded-lg hover:border-cyan-400 z-10"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           
           <button 
             onClick={nextCertificate}
-            className="absolute right-6 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors border border-gray-700 rounded-lg hover:text-cyan-600 z-10"
+            className="absolute right-6 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors border border-gray-700 rounded-lg hover:border-cyan-400 z-10"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -526,10 +533,6 @@ const AchievementsSection: React.FC = () => {
                 src={certificateImages[previewIndex]}
                 alt="Certificate"
                 className="relative max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjQwMCIgY3k9IjMwMCIgcj0iNDAiIHN0cm9rZT0iIzIyZDNlZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjx0ZXh0IHg9IjQwMCIgeT0iMzYwIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE4IiBmaWxsPSIjNmI3Mjg5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DZXJ0aWZpY2F0ZSBOb3QgRm91bmQ8L3RleHQ+Cjwvc3ZnPg==';
-                }}
               />
             </div>
           </div>

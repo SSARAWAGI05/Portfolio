@@ -203,7 +203,7 @@ const Contact: React.FC = () => {
             <div className="bg-void-800/50 border border-cyber-500/30 rounded-2xl p-8 hover:border-cyber-500/60 transition">
               <div className="flex items-center mb-6">
                 <Zap className="w-6 h-6 text-cyber-400 mr-3 animate-pulse" />
-                <h3 className="text-2xl font-bold text-white font-cyber">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white font-cyber text-center mb-6 leading-tight">
                   CONTACT_PROTOCOLS
                 </h3>
               </div>

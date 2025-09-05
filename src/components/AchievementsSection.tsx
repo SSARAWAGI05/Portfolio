@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Trophy, Award, Medal, Star, Zap, Shield, ChevronUp, Eye, X, ExternalLink, Calendar, Building2, Sparkles, Crown, Target } from 'lucide-react';
+import { Trophy, Award, Medal, Star, Zap, Shield, ChevronUp, Eye, X, ExternalLink, Calendar, Building2, ChevronLeft, ChevronRight, Crown, Target } from 'lucide-react';
 
 interface Achievement {
   id: string;
@@ -13,11 +13,23 @@ interface Achievement {
   verificationLink?: string;
 }
 
+const getTypeGradient = (type: string) => {
+  switch (type) {
+    case "hackathon": return "from-cyan-500 to-blue-500";
+    case "academic": return "from-orange-500 to-red-500";
+    case "leadership": return "from-green-500 to-teal-500";
+    case "competition": return "from-purple-500 to-pink-500";
+    default: return "from-cyber-500 to-cyber-600";
+  }
+};
 const AchievementsSection: React.FC = () => {
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [isVisible, setIsVisible] = useState(false);
+  const [hoveredAchievement, setHoveredAchievement] = useState<string | null>(null);
+  const [previewPosition, setPreviewPosition] = useState({ x: 0, y: 0 });
   const sectionRef = useRef<HTMLElement>(null);
+  const previewTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const achievements: Achievement[] = [
     {
@@ -108,478 +120,433 @@ const AchievementsSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Handle mouse movement for preview positioning
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setPreviewPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    if (hoveredAchievement) {
+      window.addEventListener('mousemove', handleMouseMove);
+      return () => window.removeEventListener('mousemove', handleMouseMove);
+    }
+  }, [hoveredAchievement]);
+
   const getIcon = (type: Achievement['type']) => {
     switch (type) {
-      case 'hackathon':
-        return <Zap className="w-6 h-6" />;
-      case 'academic':
-        return <Medal className="w-6 h-6" />;
-      case 'leadership':
-        return <Shield className="w-6 h-6" />;
-      case 'competition':
-        return <Trophy className="w-6 h-6" />;
-      default:
-        return <Award className="w-6 h-6" />;
+      case 'hackathon': return <Zap className="w-5 h-5" />;
+      case 'academic': return <Medal className="w-5 h-5" />;
+      case 'leadership': return <Shield className="w-5 h-5" />;
+      case 'competition': return <Trophy className="w-5 h-5" />;
+      default: return <Award className="w-5 h-5" />;
     }
   };
 
-  const getTypeColor = (type: Achievement['type']) => {
+  const getTypeGradient = (type: Achievement['type']) => {
     switch (type) {
-      case 'hackathon':
-        return { 
-          bg: 'from-violet-500 via-purple-500 to-fuchsia-500', 
-          text: 'text-violet-300', 
-          border: 'border-violet-400/40',
-          glow: 'shadow-violet-500/30',
-          particle: 'bg-violet-400'
-        };
-      case 'academic':
-        return { 
-          bg: 'from-amber-400 via-orange-500 to-red-500', 
-          text: 'text-amber-300', 
-          border: 'border-amber-400/40',
-          glow: 'shadow-amber-500/30',
-          particle: 'bg-amber-400'
-        };
-      case 'leadership':
-        return { 
-          bg: 'from-emerald-400 via-teal-500 to-cyan-500', 
-          text: 'text-emerald-300', 
-          border: 'border-emerald-400/40',
-          glow: 'shadow-emerald-500/30',
-          particle: 'bg-emerald-400'
-        };
-      case 'competition':
-        return { 
-          bg: 'from-rose-400 via-pink-500 to-red-500', 
-          text: 'text-rose-300', 
-          border: 'border-rose-400/40',
-          glow: 'shadow-rose-500/30',
-          particle: 'bg-rose-400'
-        };
-      default:
-        return { 
-          bg: 'from-slate-400 via-gray-500 to-zinc-500', 
-          text: 'text-slate-300', 
-          border: 'border-slate-400/40',
-          glow: 'shadow-slate-500/30',
-          particle: 'bg-slate-400'
-        };
+      case 'hackathon': return 'from-cyan-400 to-blue-500';
+      case 'academic': return 'from-orange-400 to-red-500';
+      case 'leadership': return 'from-green-400 to-teal-500';
+      case 'competition': return 'from-purple-400 to-pink-500';
+      default: return 'from-gray-400 to-gray-500';
     }
+  };
+
+  const handleCardHover = (achievementId: string, event: React.MouseEvent) => {
+    if (previewTimeoutRef.current) {
+      clearTimeout(previewTimeoutRef.current);
+    }
+    
+    const achievement = achievements.find(a => a.id === achievementId);
+    if (achievement?.certificateImage) {
+      previewTimeoutRef.current = setTimeout(() => {
+        setHoveredAchievement(achievementId);
+      }, 300); // 300ms delay for smooth experience
+    }
+  };
+
+  const handleCardLeave = () => {
+    if (previewTimeoutRef.current) {
+      clearTimeout(previewTimeoutRef.current);
+    }
+    
+    previewTimeoutRef.current = setTimeout(() => {
+      setHoveredAchievement(null);
+    }, 150); // Small delay to prevent flickering
   };
 
   const filters = [
-    { id: 'all', label: 'All Achievements', icon: Target, count: achievements.length },
-    { id: 'hackathon', label: 'Hackathons', icon: Zap, count: achievements.filter(a => a.type === 'hackathon').length },
-    { id: 'academic', label: 'Academic', icon: Medal, count: achievements.filter(a => a.type === 'academic').length },
-    { id: 'leadership', label: 'Leadership', icon: Shield, count: achievements.filter(a => a.type === 'leadership').length },
-    { id: 'competition', label: 'Competitions', icon: Trophy, count: achievements.filter(a => a.type === 'competition').length }
+    { id: 'all', label: 'All', icon: Target },
+    { id: 'hackathon', label: 'Hackathons', icon: Zap },
+    { id: 'academic', label: 'Academic', icon: Medal },
+    { id: 'leadership', label: 'Leadership', icon: Shield },
+    { id: 'competition', label: 'Competition', icon: Trophy }
   ];
 
   const filteredAchievements = activeFilter === 'all' 
     ? achievements 
     : achievements.filter(a => a.type === activeFilter);
 
-  const openPreview = (imageUrl: string) => {
-    setPreviewImage(imageUrl);
+  const certificateImages = achievements.filter(a => a.certificateImage).map(a => a.certificateImage!);
+
+  const openCertificateViewer = (imageUrl: string) => {
+    const index = certificateImages.indexOf(imageUrl);
+    setPreviewIndex(index >= 0 ? index : 0);
+    setHoveredAchievement(null); // Close hover preview
   };
 
-  const closePreview = () => {
-    setPreviewImage(null);
+  const closeCertificateViewer = () => {
+    setPreviewIndex(null);
   };
+
+  const nextCertificate = () => {
+    if (previewIndex !== null) {
+      setPreviewIndex((previewIndex + 1) % certificateImages.length);
+    }
+  };
+
+  const prevCertificate = () => {
+    if (previewIndex !== null) {
+      setPreviewIndex((previewIndex - 1 + certificateImages.length) % certificateImages.length);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (previewIndex !== null) {
+        if (e.key === 'ArrowRight') nextCertificate();
+        if (e.key === 'ArrowLeft') prevCertificate();
+        if (e.key === 'Escape') closeCertificateViewer();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [previewIndex]);
+
+  // Get the hovered achievement's certificate
+  const hoveredCertificate = hoveredAchievement 
+    ? achievements.find(a => a.id === hoveredAchievement)?.certificateImage 
+    : null;
 
   return (
-    <section 
-      ref={sectionRef}
-      id="achievements" 
-      className="relative min-h-screen py-16 sm:py-24 lg:py-32 overflow-hidden bg-gradient-to-br from-slate-950 via-gray-900 to-slate-950"
-    >
-      {/* Animated Background */}
+    <section id="achievements" className="relative min-h-screen py-24 bg-gradient-to-br from-surface-900 via-void-800 to-surface-900 overflow-hidden">
+    {/* Background Grid */}
+    <div className="absolute inset-0 bg-cyber-grid opacity-10" />
+
+      {/* Minimal Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(120,119,198,0.1),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(255,119,198,0.1),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.05),transparent_70%)]" />
-        
-        {/* Animated particles */}
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className={`absolute w-1 h-1 bg-white/20 rounded-full animate-pulse`}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 2}s`
-            }}
-          />
-        ))}
+        <div className="absolute top-20 left-10 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-green-500/3 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Enhanced Header */}
-        <div className={`text-center mb-20 transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white font-cyber">
-                ACHIEV<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 via-cyan-400 to-purple-400 animate-gradient-x">EMENTS</span>
-              </h2>
+      <div className="relative z-10 max-w-6xl mx-auto px-6">
+        {/* Minimal Header */}
+        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <h2 className="text-4xl md:text-5xl font-cyber text-white mb-4 font-cyber">
+            ACHIEV<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400 animate-glow">EMENTS</span>
+          </h2>
+          <div className="w-32 h-1 bg-gradient-to-r from-neon-500 via-cyber-500 to-electric-500 mx-auto mb-8 animate-pulse"></div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className={`flex flex-wrap justify-center gap-4 mb-16 transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          {filters.map((filter, index) => {
+        {/* Clean Filter Pills */}
+        <div className={`flex flex-wrap justify-center gap-3 mb-16 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          {filters.map((filter) => {
             const IconComponent = filter.icon;
             const isActive = activeFilter === filter.id;
+            const count = filter.id === 'all' ? achievements.length : achievements.filter(a => a.type === filter.id).length;
+            
             return (
               <button
                 key={filter.id}
                 onClick={() => setActiveFilter(filter.id)}
-                className={`group relative px-6 py-3 rounded-2xl font-cyber transition-all duration-500 ${
+                className={`group relative px-5 py-2.5 rounded-full transition-all duration-300 ${
                   isActive
-                    ? 'bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white shadow-lg shadow-purple-500/30 scale-105'
-                    : 'bg-gray-800/50 backdrop-blur-sm border border-gray-600/30 text-gray-300 hover:border-purple-400/50 hover:text-white hover:bg-gray-700/50'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/50 text-cyan-300'
+                    : 'border border-gray-700 text-gray-400 hover:text-cyan-600 hover:text-gray-300'
                 }`}
-                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-sm">
                   <IconComponent className="w-4 h-4" />
                   <span>{filter.label}</span>
                   <span className={`px-2 py-0.5 rounded-full text-xs ${
-                    isActive ? 'bg-white/20' : 'bg-gray-700'
+                    isActive ? 'bg-cyan-400/20 text-cyan-300' : 'bg-gray-800 text-gray-500'
                   }`}>
-                    {filter.count}
+                    {count}
                   </span>
                 </div>
                 {isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-2xl blur-xl opacity-50 -z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-xl" />
                 )}
               </button>
             );
           })}
         </div>
 
-        {/* Featured Achievements - Hero Style */}
+        {/* Featured Achievements - Minimalist Cards */}
         {activeFilter === 'all' && (
-          <div className={`mb-24 transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <div className="flex items-center gap-4 mb-16">
-              <div className="h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent flex-1" />
-              <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-400/30 rounded-2xl">
-                <Crown className="w-6 h-6 text-yellow-400" fill="currentColor" />
-                <span className="text-lg font-cyber text-yellow-300">FEATURED EXCELLENCE</span>
+          <div className={`mb-20 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="flex items-center gap-4 mb-12">
+              <div className="flex items-center gap-2 text-orange-400">
+                <Crown className="w-5 h-5" />
+                <span className="text-sm font-cyber tracking-wider">FEATURED</span>
               </div>
-              <div className="h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent flex-1" />
+              <div className="flex-1 h-px bg-gradient-to-r from-orange-400/50 to-transparent" />
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-10">
-              {achievements.filter(a => a.featured).map((achievement, index) => {
-                const colors = getTypeColor(achievement.type);
-                return (
-                  <div 
-                    key={achievement.id}
-                    className="group relative"
-                    style={{ animationDelay: `${index * 200}ms` }}
-                  >
-                    {/* Outer glow */}
-                    <div className={`absolute -inset-1 bg-gradient-to-r ${colors.bg} rounded-3xl opacity-0 group-hover:opacity-30 blur-2xl transition-all duration-700`} />
-                    
-                    <div className="relative bg-gradient-to-br from-gray-800/60 via-gray-900/60 to-black/60 backdrop-blur-2xl border border-gray-700/30 rounded-3xl p-8 group-hover:border-purple-400/40 transition-all duration-700 overflow-hidden">
-                      {/* Background Pattern */}
-                      <div className="absolute inset-0 opacity-5">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(120,119,198,0.4),transparent_70%)]" />
+            <div className="grid md:grid-cols-2 gap-8">
+              {achievements.filter(a => a.featured).map((achievement, index) => (
+                <div 
+                  key={achievement.id}
+                  className="group relative"
+                  style={{ animationDelay: `${index * 200}ms` }}
+                  onMouseEnter={(e) => handleCardHover(achievement.id, e)}
+                  onMouseLeave={handleCardLeave}
+                >
+                  <div className={`absolute -inset-0.5 bg-gradient-to-r ${getTypeGradient(achievement.type)} rounded-2xl opacity-0 group-hover:opacity-20 blur transition-all duration-500`} />
+                  
+                  <div className="bg-void-800/50 backdrop-blur-sm border border-void-600 rounded-2xl p-6 hover:bg-void-800/70 transition-all duration-500 hover:shadow-xl hover:shadow-neon-500/10 group">
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-6">
+                      <div className={`p-3 rounded-xl bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-20`}>
+                        {getIcon(achievement.type)}
                       </div>
                       
-                      {/* Floating Elements */}
-                      <div className="absolute top-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Sparkles className="w-8 h-8 text-yellow-400" />
-                      </div>
-                      
-                      <div className="relative z-10">
-                        {/* Header with enhanced styling */}
-                        <div className="flex items-start justify-between mb-8">
-                          <div className="relative">
-                            <div className={`absolute -inset-2 bg-gradient-to-r ${colors.bg} rounded-2xl blur-lg opacity-50`} />
-                            <div className={`relative p-4 rounded-2xl bg-gradient-to-r ${colors.bg} shadow-2xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-                              {getIcon(achievement.type)}
-                            </div>
-                          </div>
-                          
-                          <div className="text-right space-y-3">
-                            <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4 text-gray-400" />
-                              <span className="px-3 py-1 bg-gray-800/80 border border-gray-600/50 rounded-xl text-sm text-gray-300 font-cyber">
-                                {achievement.date}
-                              </span>
-                            </div>
-                            <div className="flex gap-3">
-                              {achievement.certificateImage && (
-                                <button 
-                                  onClick={() => openPreview(achievement.certificateImage!)}
-                                  className="group/btn p-3 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-400/30 rounded-xl text-blue-300 hover:text-blue-200 transition-all duration-300 hover:scale-110"
-                                  title="View Certificate"
-                                >
-                                  <Eye className="w-5 h-5" />
-                                </button>
-                              )}
-                              {achievement.verificationLink && (
-                                <button className="group/btn p-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 rounded-xl text-emerald-300 hover:text-emerald-200 transition-all duration-300 hover:scale-110">
-                                  <ExternalLink className="w-5 h-5" />
-                                </button>
-                              )}
-                            </div>
-                          </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 text-gray-300 text-sm">
+                          <Calendar className="w-4 h-4" />
+                          {achievement.date}
                         </div>
                         
-                        {/* Enhanced Certificate Preview */}
                         {achievement.certificateImage && (
-                          <div className="mb-8 relative overflow-hidden rounded-2xl group/img cursor-pointer border border-gray-600/30" onClick={() => openPreview(achievement.certificateImage!)}>
-                            <img 
-                              src={achievement.certificateImage}
-                              alt={`${achievement.title} Certificate`}
-                              className="w-full h-32 sm:h-40 object-cover group-hover/img:scale-110 transition-all duration-700"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMWYyOTM3Ii8+CjxwYXRoIGQ9Ik0xODAgMTAwTDIwMCA4MEwyMjAgMTAwTDIwMCAxMjBMMTgwIDEwMFoiIGZpbGw9IiM2MzY2ZjEiLz4KPHRleHQgeD0iMjAwIiB5PSIxNDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOWNhM2FmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DZXJ0aWZpY2F0ZSBJbWFnZTwvdGV4dD4KPC9zdmc+';
-                              }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-all duration-500" />
-                            <div className="absolute bottom-4 left-4 opacity-0 group-hover/img:opacity-100 transition-all duration-500 transform translate-y-4 group-hover/img:translate-y-0">
-                              <div className="flex items-center gap-2 text-white">
-                                <Eye className="w-5 h-5" />
-                                <span className="text-sm font-cyber">Click to expand</span>
-                              </div>
-                            </div>
-                          </div>
+                          <button 
+                            onClick={() => openCertificateViewer(achievement.certificateImage!)}
+                            className="p-2 border border-gray-700 rounded-lg text-gray-400 hover:text-cyan-400 hover:border-cyan-400/50 transition-all duration-300"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
                         )}
-                        
-                        {/* Enhanced Content */}
-                        <div className="space-y-6">
-                          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-cyber text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-blue-300 transition-all duration-500">
-                            {achievement.title}
-                          </h3>
-                          
-                          <div className="flex items-center gap-3 text-gray-300">
-                            <Building2 className="w-5 h-5 text-gray-400" />
-                            <span className="font-cyber text-lg">{achievement.issuer}</span>
-                          </div>
-                          
-                          <p className="text-gray-300 leading-relaxed text-lg">
-                            {achievement.description}
-                          </p>
-
-                          <div className="flex items-center justify-between pt-6 border-t border-gray-700/50">
-                            <div className="flex items-center gap-3">
-                              <span className={`px-4 py-2 rounded-xl text-sm uppercase tracking-wider font-cyber ${colors.text} bg-gray-800/60 border ${colors.border}`}>
-                                {achievement.type}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2 px-4 py-2 bg-yellow-500/10 border border-yellow-400/30 rounded-xl">
-                              <Crown className="w-5 h-5 text-yellow-400" fill="currentColor" />
-                              <span className="text-yellow-300 font-cyber">FEATURED</span>
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </div>
+
+                    {/* Content */}
+                    <div className="space-y-4">
+                      <h3 className="text-2xl font-cyber font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-blue-400 transition-all duration-500">
+                        {achievement.title}
+                      </h3>
+                      
+                      <div className="flex items-center gap-2 text-gray-400 text-sm">
+                        <Building2 className="w-4 h-4" />
+                        <span>{achievement.issuer}</span>
+                      </div>
+                      
+                      <p className="text-gray-300 leading-relaxed">
+                        {achievement.description}
+                      </p>
+
+                      {/* Type Badge */}
+                      <div className="pt-4">
+                        <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-10 border border-current text-sm`}
+                              style={{ color: `rgb(${achievement.type === 'hackathon' ? '34, 211, 238' : achievement.type === 'academic' ? '251, 146, 60' : achievement.type === 'leadership' ? '52, 211, 153' : '168, 85, 247'})` }}>
+                          {getIcon(achievement.type)}
+                          {achievement.type.toUpperCase()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* All Achievements - Clean Grid */}
+        <div className={`transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredAchievements.filter(a => !a.featured || activeFilter !== 'all').map((achievement, index) => (
+              <div 
+                key={achievement.id}
+                className="group relative"
+                style={{ animationDelay: `${index * 100}ms` }}
+                onMouseEnter={(e) => handleCardHover(achievement.id, e)}
+                onMouseLeave={handleCardLeave}
+              >
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${getTypeGradient(achievement.type)} rounded-xl opacity-0 group-hover:opacity-10 transition-all duration-500`} />
+                
+                <div className="relative bg-gray-900/30 backdrop-blur-sm border border-gray-800/50 rounded-xl p-6 group-hover:text-cyan-700/50 transition-all duration-500 group-hover:-translate-y-1">
+                  {/* Type Icon */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`p-2.5 rounded-lg bg-gradient-to-r ${getTypeGradient(achievement.type)} bg-opacity-20`}>
+                      {getIcon(achievement.type)}
+                    </div>
+                    
+                    {achievement.certificateImage && (
+                      <button 
+                        onClick={() => openCertificateViewer(achievement.certificateImage!)}
+                        className="p-2 text-gray-500 hover:text-cyan-400 transition-colors duration-300"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="space-y-3">
+                    <h4 className="text-lg font-cyber font-bold text-white leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-blue-400 transition-all duration-300">
+                      {achievement.title}
+                    </h4>
+
+                    <div className="space-y-2 text-sm text-gray-400">
+                      <div className="flex items-center gap-2">
+                        <Building2 className="w-3 h-3" />
+                        <span>{achievement.issuer}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-3 h-3" />
+                        <span>{achievement.date}</span>
+                      </div>
+                    </div>
+
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      {achievement.description}
+                    </p>
+
+                    {/* Bottom Badge */}
+                    <div className="pt-3">
+                      <span className={`px-2 py-1 text-xs font-cyber rounded-md bg-gradient-to-r ${getTypeGradient(achievement.type)} text-black`}
+                            style={{ 
+                              color: `rgb(${achievement.type === 'hackathon' ? '34, 211, 238' : achievement.type === 'academic' ? '251, 146, 60' : achievement.type === 'leadership' ? '52, 211, 153' : '168, 85, 247'})`,
+                              borderColor: `rgb(${achievement.type === 'hackathon' ? '34, 211, 238' : achievement.type === 'academic' ? '251, 146, 60' : achievement.type === 'leadership' ? '52, 211, 153' : '168, 85, 247'}, 0.3)`
+                            }}>
+                        {achievement.type.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats Footer */}
+        <div className={`mt-20 transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {filters.slice(1).map((filter) => {
+                const count = achievements.filter(a => a.type === filter.id).length;
+                return (
+                  <div key={filter.id} className="space-y-2">
+                    <div className="text-3xl font-cyber text-white">{count}</div>
+                    <div className="text-xs text-gray-500 font-cyber tracking-wider uppercase">{filter.label}</div>
                   </div>
                 );
               })}
             </div>
           </div>
-        )}
-
-        {/* All Achievements Grid */}
-        <div className={`transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="flex items-center gap-4 mb-12">
-            <div className="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1" />
-            <h3 className="text-2xl font-cyber text-white">
-              {activeFilter === 'all' ? 'All Achievements' : `${filters.find(f => f.id === activeFilter)?.label} (${filteredAchievements.length})`}
-            </h3>
-            <div className="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1" />
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {filteredAchievements.filter(a => !a.featured || activeFilter !== 'all').map((achievement, index) => {
-              const colors = getTypeColor(achievement.type);
-              return (
-                <div 
-                  key={achievement.id}
-                  className="group relative hover:z-10"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  {/* Hover glow effect */}
-                  <div className={`absolute -inset-1 bg-gradient-to-r ${colors.bg} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-700`} />
-                  
-                  <div className="relative bg-gradient-to-br from-gray-800/40 via-gray-900/40 to-black/40 backdrop-blur-xl border border-gray-700/30 rounded-2xl p-6 group-hover:border-purple-400/30 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-purple-500/10 group-hover:-translate-y-2 group-hover:scale-105 overflow-hidden">
-                    {/* Background pattern */}
-                    <div className={`absolute top-0 right-0 w-32 h-32 ${colors.particle}/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700`} />
-                    
-                    <div className="relative z-10">
-                      {/* Header */}
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="relative">
-                          <div className={`absolute -inset-1 bg-gradient-to-r ${colors.bg} rounded-xl blur opacity-50`} />
-                          <div className={`relative p-3 rounded-xl bg-gradient-to-r ${colors.bg} shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
-                            {getIcon(achievement.type)}
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          {achievement.certificateImage && (
-                            <button 
-                              onClick={() => openPreview(achievement.certificateImage!)}
-                              className="p-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-400/30 rounded-lg text-blue-300 hover:text-blue-200 transition-all duration-300 hover:scale-110"
-                              title="View Certificate"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </button>
-                          )}
-                          {achievement.verificationLink && (
-                            <button className="p-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 rounded-lg text-emerald-300 hover:text-emerald-200 transition-all duration-300 hover:scale-110">
-                              <ExternalLink className="w-4 h-4" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Certificate Thumbnail */}
-                      {achievement.certificateImage && (
-                        <div className="mb-6 relative overflow-hidden rounded-xl cursor-pointer border border-gray-600/20 group/img" onClick={() => openPreview(achievement.certificateImage!)}>
-                          <img 
-                            src={achievement.certificateImage}
-                            alt={`${achievement.title} Certificate`}
-                            className="w-full h-20 sm:h-24 object-cover group-hover/img:scale-110 transition-all duration-700"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDMwMCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMTUwIiBmaWxsPSIjMWYyOTM3Ii8+CjxwYXRoIGQ9Ik0xMzUgNzVMMTUwIDYwTDE2NSA3NUwxNTAgOTBMMTM1IDc1WiIgZmlsbD0iIzYzNjZmMSIvPgo8dGV4dCB4PSIxNTAiIHk9IjEwNSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM5Y2EzYWYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNlcnRpZmljYXRlPC90ZXh0Pgo8L3N2Zz4=';
-                            }}
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <Eye className="w-5 h-5 text-white" />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Content */}
-                      <div className="space-y-4">
-                        <h4 className="font-cyber text-lg sm:text-xl text-white leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-blue-300 transition-all duration-300">
-                          {achievement.title}
-                        </h4>
-
-                        <div className="flex items-center gap-2 text-sm text-gray-400">
-                          <Calendar className="w-4 h-4" />
-                          <span className="font-cyber">{achievement.date}</span>
-                          <span className="text-gray-600">•</span>
-                          <Building2 className="w-4 h-4" />
-                          <span className="font-cyber">{achievement.issuer}</span>
-                        </div>
-
-                        <p className="text-gray-300 text-sm leading-relaxed">
-                          {achievement.description}
-                        </p>
-
-                        <div className="pt-4 border-t border-gray-700/30">
-                          <div className="flex items-center justify-between">
-                            <span className={`text-xs px-3 py-1.5 rounded-lg ${colors.text} bg-gray-800/60 border ${colors.border} uppercase tracking-wider font-cyber`}>
-                              {achievement.type}
-                            </span>
-                            {achievement.featured && (
-                              <div className="flex items-center gap-1 px-2 py-1 bg-yellow-500/10 border border-yellow-400/20 rounded-md">
-                                <Crown className="w-3 h-3 text-yellow-400" fill="currentColor" />
-                                <span className="text-yellow-300 text-xs font-cyber">FEATURED</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Enhanced Stats Section */}
-        <div className={`mt-24 transition-all duration-1000 delay-900 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            {filters.slice(1).map((filter, index) => {
-              const colors = getTypeColor(filter.id as Achievement['type']);
-              const IconComponent = filter.icon;
-              return (
-                <div 
-                  key={filter.id}
-                  className="group relative"
-                  style={{ animationDelay: `${index * 150}ms` }}
-                >
-                  <div className={`absolute -inset-1 bg-gradient-to-r ${colors.bg} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-700`} />
-                  <div className="relative bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl border border-gray-700/20 rounded-2xl p-6 text-center group-hover:border-purple-400/30 transition-all duration-500">
-                    <div className={`inline-flex p-4 rounded-xl bg-gradient-to-r ${colors.bg} mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <IconComponent className="w-6 h-6" />
-                    </div>
-                    <div className="text-3xl font-cyber text-white mb-1">{filter.count}</div>
-                    <div className="text-sm text-gray-400 font-cyber">{filter.label}</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Enhanced CTA Button */}
-        <div className={`text-center mt-20 transition-all duration-1000 delay-1100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <button className="group relative inline-flex items-center px-8 sm:px-12 py-4 sm:py-6 overflow-hidden rounded-2xl transition-all duration-500 hover:scale-105">
-            {/* Background gradients */}
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-2xl" />
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-700 via-blue-700 to-cyan-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            
-            
-          </button>
         </div>
       </div>
 
-      {/* Enhanced Certificate Preview Modal */}
-      {previewImage && (
-        <div className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="relative max-w-6xl max-h-full">
-            {/* Close button */}
-            <button 
-              onClick={closePreview}
-              className="absolute top-2 right-2 sm:-top-16 sm:right-0 p-2 sm:p-3 text-white hover:text-gray-300 transition-colors z-10 bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-600/30 hover:border-gray-500/50"
-            >
-              <X className="w-8 h-8" />
-            </button>
+      {/* Hover Certificate Preview */}
+      {hoveredCertificate && (
+        <div 
+          className="fixed pointer-events-none z-40 transition-all duration-300"
+          style={{
+            left: `${Math.min(previewPosition.x + 20, window.innerWidth - 320)}px`,
+            top: `${Math.min(previewPosition.y - 120, window.innerHeight - 240)}px`,
+            transform: hoveredCertificate ? 'scale(1) opacity(1)' : 'scale(0.9) opacity(0)'
+          }}
+        >
+          <div className="relative">
+            {/* Glow Effect */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-2xl blur-xl" />
             
-            {/* Image container with enhanced styling */}
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 rounded-3xl blur-2xl opacity-30" />
-              <div className="relative bg-gray-900/50 backdrop-blur-sm rounded-3xl p-4 border border-gray-600/30">
+            {/* Certificate Preview */}
+            <div className="relative bg-gray-900/95 backdrop-blur-xl border border-gray-700 rounded-2xl p-4 shadow-2xl max-w-sm">
+              <div className="relative overflow-hidden rounded-xl">
                 <img 
-                  src={previewImage}
+                  src={hoveredCertificate}
                   alt="Certificate Preview"
-                  className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
+                  className="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iMjAiIHN0cm9rZT0iIzIyZDNlZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTQwIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNmI3Mjg5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DZXJ0aWZpY2F0ZSBQcmV2aWV3PC90ZXh0Pgo8L3N2Zz4=';
+                  }}
                 />
+                
+                {/* Overlay with click hint */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-4 left-4 text-white text-sm font-cyber flex items-center gap-2">
+                    <Eye className="w-4 h-4" />
+                    Click to view full size
+                  </div>
+                </div>
               </div>
-            </div>
-            
-            {/* Floating action buttons */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-4">
-              <button className="px-6 py-3 bg-blue-600/80 hover:bg-blue-600 backdrop-blur-sm border border-blue-400/30 rounded-xl text-white font-cyber transition-all duration-300 hover:scale-105">
-                <ExternalLink className="w-4 h-4 mr-2 inline" />
-                Verify
-              </button>
-              <button className="px-6 py-3 bg-gray-800/80 hover:bg-gray-700 backdrop-blur-sm border border-gray-600/30 rounded-xl text-white font-cyber transition-all duration-300 hover:scale-105">
-                <Award className="w-4 h-4 mr-2 inline" />
-                Details
-              </button>
+              
+              {/* Preview Label */}
+              <div className="mt-3 text-center">
+                <span className="text-xs text-gray-400 font-cyber tracking-wider">CERTIFICATE PREVIEW</span>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Floating Action Button for Quick Access */}
-      <div className="fixed bottom-8 right-8 z-40">
-        <button className="group p-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-full shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all duration-300 hover:scale-110">
-          <Trophy className="w-6 h-6 text-white group-hover:rotate-12 transition-transform duration-300" />
-        </button>
-      </div>
+      {/* Certificate Slideshow Modal */}
+      {previewIndex !== null && (
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
+          {/* Close Button */}
+          <button 
+            onClick={closeCertificateViewer}
+            className="absolute top-6 right-6 p-2 text-gray-400 hover:text-white transition-colors z-10 border border-gray-700 rounded-lg hover:text-cyan-600"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          
+          {/* Navigation Buttons */}
+          <button 
+            onClick={prevCertificate}
+            className="absolute left-6 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors border border-gray-700 rounded-lg hover:text-cyan-600 z-10"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          
+          <button 
+            onClick={nextCertificate}
+            className="absolute right-6 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors border border-gray-700 rounded-lg hover:text-cyan-600 z-10"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Certificate Image */}
+          <div className="relative max-w-5xl max-h-[90vh] mx-auto px-20">
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-2xl blur-xl" />
+              <img 
+                src={certificateImages[previewIndex]}
+                alt="Certificate"
+                className="relative max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjQwMCIgY3k9IjMwMCIgcj0iNDAiIHN0cm9rZT0iIzIyZDNlZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjx0ZXh0IHg9IjQwMCIgeT0iMzYwIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE4IiBmaWxsPSIjNmI3Mjg5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DZXJ0aWZpY2F0ZSBOb3QgRm91bmQ8L3RleHQ+Cjwvc3ZnPg==';
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Counter */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-lg">
+            <span className="text-sm text-gray-400 font-cyber">
+              {previewIndex + 1} / {certificateImages.length}
+            </span>
+          </div>
+
+          {/* Keyboard Hint */}
+          <div className="absolute bottom-6 right-6 text-xs text-gray-500 font-cyber">
+            Use ← → keys to navigate • ESC to close
+          </div>
+        </div>
+      )}
     </section>
   );
 };

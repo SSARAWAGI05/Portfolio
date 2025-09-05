@@ -143,7 +143,7 @@ const ExperienceSection: React.FC = () => {
         <ScrollReveal direction="up" delay={800}>
           <div className="mt-20">
             <h3 className="text-4xl font-bold text-center text-white mb-12 font-cyber tracking-widest">
-              CERTIFICATION_<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400">REGISTRY</span>
+              CERTIF<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400">ICATION_</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">

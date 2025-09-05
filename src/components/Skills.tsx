@@ -470,8 +470,10 @@ const EnhancedSkills: React.FC = () => {
         {/* Enhanced Timeline */}
         <ScrollReveal direction="up" delay={800}>
           <div className="mt-20">
-            <h3 className="text-4xl font-bold text-center text-white mb-16 font-cyber">
-              NEURAL_<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-purple-400">EVOLUTION</span>
+            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center text-white mb-10 sm:mb-12 md:mb-16 font-cyber leading-tight">
+              TECH_<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-purple-400">
+                TIMELINE
+              </span>
             </h3>
           
             <div className="relative max-w-6xl mx-auto">

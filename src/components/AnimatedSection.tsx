@@ -20,9 +20,9 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       visible: { 
         opacity: 1,
         transition: {
-          duration: 0.8,
+          duration: 0.5,
           delay,
-          ease: [0.25, 0.46, 0.45, 0.94]
+          ease: "easeOut"
         }
       }
     };
@@ -103,7 +103,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       className={className}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={{ once: true, amount: 0.05 }}  // 👈 triggers earlier
       variants={getVariants()}
     >
       {children}

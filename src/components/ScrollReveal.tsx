@@ -14,7 +14,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   direction = 'up',
   delay = 0,
-  duration = 800,
+  duration = 500,
   threshold = 0.1,
   className = '',
   distance = 50
@@ -35,7 +35,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       },
       { 
         threshold,
-        rootMargin: '0px 0px -50px 0px' // Trigger animation slightly before element is fully visible
+        rootMargin: '0px 0px -100px 0px' // Trigger animation slightly before element is fully visible
       }
     );
 

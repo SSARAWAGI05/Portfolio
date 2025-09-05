@@ -60,7 +60,7 @@ const ExperienceSection: React.FC = () => {
       <div className="absolute inset-0 bg-cyber-grid opacity-10" />
       
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ScrollReveal direction="fade" delay={200}>
+        <ScrollReveal direction="fade" delay={100}>
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-cyber">
               EXPERIENCE <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400 animate-glow">LOG</span>
@@ -82,19 +82,19 @@ const ExperienceSection: React.FC = () => {
               <ScrollReveal
                 key={experience.id}
                 direction={index % 2 === 0 ? 'left' : 'right'}
-                delay={400 + index * 200}
+                delay={150 + index * 100}
               >
                 <div className={`flex flex-col sm:flex-row items-center mb-16 relative group ${index % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}>
                 {/* Timeline Node */}
                 <div className="absolute left-1/2 transform -translate-x-1/2 z-10">
-                  <div className={`w-16 h-16 bg-gradient-to-r ${colors.bg} rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-2xl transition-all duration-300 animate-cyber-pulse border-4 border-void-900`}>
+                  <div className={`w-16 h-16 bg-gradient-to-r ${colors.bg} rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-2xl transition-all duration-150 animate-cyber-pulse border-4 border-void-900`}>
                     {getIcon(experience.type)}
                   </div>
                 </div>
 
                 {/* Content Card */}
                 <div className={`w-full sm:w-5/12 ${index % 2 === 0 ? 'sm:pr-12' : 'sm:pl-12'} mt-6 sm:mt-0`}>
-                  <div className={`bg-void-800/50 backdrop-blur-sm border ${colors.border} rounded-2xl p-6 hover:bg-void-800/70 transition-all duration-500 hover:shadow-xl hover:shadow-neon-500/10 group-hover:border-neon-500/60`}>
+                  <div className={`bg-void-800/50 backdrop-blur-sm border ${colors.border} rounded-2xl p-6 hover:bg-void-800/70 transition-all duration-200 hover:shadow-xl hover:shadow-neon-500/10 group-hover:border-neon-500/60`}>
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         <h3 className="text-xl font-bold text-white mb-2 font-cyber group-hover:text-neon-400 transition-colors">
@@ -140,10 +140,10 @@ const ExperienceSection: React.FC = () => {
         </div>
 
         {/* Certifications Section */}
-        <ScrollReveal direction="up" delay={800}>
+        <ScrollReveal direction="up" delay={300}>
           <div className="mt-20">
             <h3 className="text-4xl font-bold text-center text-white mb-12 font-cyber tracking-widest">
-              CERTIF<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400">ICATION_</span>
+              CERTIF<span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400">ICATION</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -187,7 +187,7 @@ const ExperienceSection: React.FC = () => {
               ].map((cert, index) => (
                 <div
                   key={index}
-                  className="relative bg-void-800/40 backdrop-blur-xl border border-void-600 rounded-2xl p-6 shadow-lg shadow-black/30 hover:shadow-2xl hover:shadow-neon-500/20 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 group"
+                  className="relative bg-void-800/40 backdrop-blur-xl border border-void-600 rounded-2xl p-6 shadow-lg shadow-black/30 hover:shadow-2xl hover:shadow-neon-500/20 transition-all duration-200 transform hover:-translate-y-2 hover:scale-105 group"
                   style={{ animationDelay: `${index * 120}ms` }}
                 >
                   {/* Gradient Header Bar */}

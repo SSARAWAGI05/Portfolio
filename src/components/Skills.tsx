@@ -46,7 +46,7 @@ const EnhancedSkills: React.FC = () => {
       ]
     },
     {
-      title: "CORE_LANGUAGES",
+      title: "LANGUAGES",
       icon: <Code2 className="w-6 h-6" />,
       color: "cyber",
       priority: "high",
@@ -76,7 +76,7 @@ const EnhancedSkills: React.FC = () => {
       ]
     },
     {
-      title: "AI/ML_FRAMEWORKS",
+      title: "FRAMEWORKS",
       icon: <Network className="w-6 h-6" />,
       color: "electric",
       priority: "high",
@@ -137,7 +137,7 @@ const EnhancedSkills: React.FC = () => {
       ]
     },
     {
-      title: "DATA_VISUALISATION",
+      title: "VISUALISATION",
       icon: <div>📊</div>, // Replaced with emoji
       color: "electric",
       priority: "medium",
@@ -445,10 +445,7 @@ const EnhancedSkills: React.FC = () => {
                     </div>
                   )}
                   
-                  <div className="flex items-center mb-8">
-                    <div className={`p-4 bg-gradient-to-r ${colorClasses.bg} rounded-xl mr-4 group-hover:animate-bounce transition-transform duration-300`}>
-                      {category.icon}
-                    </div>
+                  <div className="mb-8 text-center">
                     <div>
                       <h3 className={`text-xl font-bold ${colorClasses.text} font-cyber tracking-wider break-words whitespace-normal`}>
                         {category.title}

@@ -77,7 +77,7 @@ const AchievementsSection: React.FC = () => {
     {
       id: 'ach-006',
       title: 'Safety Patrol Leadership',
-      issuer: 'School Administration',
+      issuer: 'La Martiniere For Boys, Kolkata',
       date: '2023',
       type: 'leadership',
       description: 'Award for outstanding conduct and management of the Safety Patrol Squad',
@@ -86,10 +86,10 @@ const AchievementsSection: React.FC = () => {
     {
       id: 'ach-007',
       title: 'Computer Science Excellence',
-      issuer: 'ISC Board',
+      issuer: 'La Martiniere For Boys, Kolkata',
       date: '2023',
       type: 'academic',
-      description: 'Award for achieving the highest marks in Computer Science in ISC-2023 (98%)',
+      description: 'Award for achieving the highest marks in Computer Science in ISC-2023 (100%)',
       certificateImage: '/Screenshot 2025-09-04 at 9.46.38 PM.png'
     }
   ];

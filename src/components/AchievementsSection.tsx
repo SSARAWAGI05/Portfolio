@@ -259,8 +259,8 @@ const AchievementsSection: React.FC = () => {
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-4xl md:text-5xl font-cyber text-white mb-4 tracking-wider">
-            ACHIEV<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 animate-pulse">EMENTS</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-cyber">
+            ACHIEVEMENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400 animate-glow">LOG</span>
           </h2>
           <div className="w-32 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-blue-500 mx-auto mb-8 animate-pulse"></div>
         </div>

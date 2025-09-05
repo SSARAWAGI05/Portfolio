@@ -331,8 +331,8 @@ const OptimizedSkills: React.FC = () => {
           <div className="text-center mb-16">
             <div className="flex justify-center items-center mb-6">
               <Activity className="w-8 h-8 text-green-400 mr-4" />
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
-                TECHNICAL_<span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-cyan-400 to-purple-400">ARSENAL</span>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-cyber">
+                TECHNICAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-electric-400 animate-glow">ARSENAL</span>
               </h2>
               <Sparkles className="w-8 h-8 text-purple-400 ml-4" />
             </div>
@@ -403,7 +403,7 @@ const OptimizedSkills: React.FC = () => {
         {/* Timeline */}
         <ScrollReveal direction="up" delay={300}>
           <div className="mt-20">
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white mb-12 leading-tight">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-cyber text-center text-white mb-12 leading-tight">
               TECH_<span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400">
                 TIMELINE
               </span>

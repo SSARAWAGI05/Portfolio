@@ -11,6 +11,16 @@ const Hero: React.FC<{ onStartTour?: () => void }> = ({ onStartTour }) => {
     }
   };
 
+  // Handle tour button click - start immediately
+  const handleTourClick = () => {
+    console.log("Tour button clicked - starting tour immediately!"); // Debug log
+    if (onStartTour) {
+      onStartTour();
+    } else {
+      console.error("onStartTour function not provided");
+    }
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -234,15 +244,22 @@ const Hero: React.FC<{ onStartTour?: () => void }> = ({ onStartTour }) => {
                   </button>
                 </div>
 
-                {/* Tour Button */}
-                <button 
-                  onClick={onStartTour} 
+                {/* Fixed Tour Button */}
+                <button
+                  id="tour-button"
+                  onClick={handleTourClick}
                   className="cyber-button btn-accent group h-14 lg:h-16 w-full"
-                  aria-label="Get a tour"
+                  aria-label="Start guided tour"
+                  type="button"
                 >
                   <div className="button-content">
                     <Eye className="button-icon w-4 h-4 lg:w-5 lg:h-5" />
-                    <span className="button-text text-xs lg:text-sm" data-text="GET_A_TOUR()">GET_A_TOUR()</span>
+                    <span
+                      className="button-text text-xs lg:text-sm"
+                      data-text="START_TOUR()"
+                    >
+                      START_TOUR()
+                    </span>
                     <div className="status-indicator accent-indicator"></div>
                   </div>
                   <div className="scan-line"></div>

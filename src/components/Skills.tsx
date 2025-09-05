@@ -582,11 +582,11 @@ const EnhancedSkills: React.FC = () => {
                 const colorClasses = getColorClasses(item.color);
                 return (
                   <div 
-                    key={item.year}
-                    className={`flex flex-col md:flex-row items-center mb-16 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} relative group`}
+                    key={`${item.year}-${index}`}
+                    className={`flex flex-col md:flex-row items-center mb-24 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} relative group`}
                   >
                     {/* Enhanced Timeline Node */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="absolute md:static left-1/2 md:left-auto transform -translate-x-1/2 md:transform-none z-10 mb-6 md:mb-0">
                       <div className={`w-20 h-20 bg-gradient-to-r ${colorClasses.bg} rounded-full flex items-center justify-center text-white shadow-2xl ${colorClasses.glow} transition-all duration-300 group-hover:scale-110`}>
                         <div className="text-center">
                           <div className="font-matrix font-bold text-sm">{item.year}</div>
@@ -598,7 +598,7 @@ const EnhancedSkills: React.FC = () => {
                     </div>
 
                     {/* Enhanced Content Card */}
-                    <div className={`w-full md:w-5/12 ${index % 2 === 0 ? 'md:pr-16' : 'md:pl-16'} mt-8 md:mt-0`}>
+                    <div className={`w-full md:w-5/12 ${index % 2 === 0 ? 'md:pr-20' : 'md:pl-20'} mt-28 md:mt-0`}>
                       <div className={`bg-void-800/50 backdrop-blur-sm border ${colorClasses.border} rounded-2xl p-8 hover:bg-void-800/70 transition-all duration-500 ${colorClasses.glow} group-hover:scale-105`}>
                         <div className="flex items-center justify-between mb-4">
                           <h4 className={`text-xl font-bold ${colorClasses.text} font-cyber`}>

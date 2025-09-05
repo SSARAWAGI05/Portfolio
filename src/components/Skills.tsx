@@ -345,10 +345,10 @@ const EnhancedSkills: React.FC = () => {
         onMouseLeave={() => setHoveredSkill(null)}
       >
         <div className="flex items-start justify-between mb-3">
-          <h4 className="font-matrix font-semibold text-white text-sm">
+          <h4 className="flex-1 mr-2 font-matrix font-semibold text-white text-xs sm:text-sm md:text-base break-words whitespace-normal">
             {skill.name}
           </h4>
-          <div className={`w-2 h-2 rounded-full ${colorClasses.accent} animate-pulse`} />
+          <div className={`flex-shrink-0 w-2 h-2 rounded-full ${colorClasses.accent} animate-pulse`} />
         </div>
         
         <p className="text-xs text-gray-400 mb-3 leading-relaxed">
@@ -450,7 +450,7 @@ const EnhancedSkills: React.FC = () => {
                       {category.icon}
                     </div>
                     <div>
-                      <h3 className={`text-xl font-bold ${colorClasses.text} font-cyber tracking-wider`}>
+                      <h3 className={`text-xl font-bold ${colorClasses.text} font-cyber tracking-wider break-words whitespace-normal`}>
                         {category.title}
                       </h3>
                       <div className="text-xs text-gray-400 mt-1">

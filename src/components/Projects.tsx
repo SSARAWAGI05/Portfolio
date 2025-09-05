@@ -180,8 +180,8 @@ const Projects: React.FC = () => {
 
         {/* More Projects Terminal */}
         <ScrollReveal direction="up" delay={1200}>
-          <div className="text-center mt-16">
-          <div className="inline-block bg-void-800/50 backdrop-blur-sm border border-neon-500/30 rounded-2xl p-6 hover:border-neon-500/60 transition-all duration-300 group">
+          <div className="flex justify-center mt-16">
+            <div className="w-full max-w-md bg-void-800/50 backdrop-blur-sm border border-neon-500/30 rounded-2xl p-6 hover:border-neon-500/60 transition-all duration-300 group">
             <div className="flex items-center justify-center mb-4">
               <div className="flex space-x-2 mr-4">
                 <div className="w-3 h-3 bg-red-500 rounded-full" />

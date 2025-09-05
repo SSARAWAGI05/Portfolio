@@ -143,7 +143,7 @@ const About: React.FC = () => {
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-electric-400 font-cyber">
-                EDUCATION_LOG.SYS
+                EDUCATION_LOG
               </h3>
             </div>
 

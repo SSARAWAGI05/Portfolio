@@ -196,7 +196,7 @@ const Projects: React.FC = () => {
               className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-void-700 to-surface-700 text-white rounded-xl hover:from-surface-700 hover:to-void-700 transition-all duration-300 font-matrix group-hover:shadow-lg group-hover:shadow-neon-500/20"
             >
               <Github className="w-5 h-5 group-hover:animate-spin" />
-              <span>&gt; EXPLORE_ALL_REPOSITORIES()</span>
+              <span> EXPLORE_ALL_REPOSITORIES()</span>
               <Zap className="w-4 h-4 text-neon-400 group-hover:animate-pulse" />
             </a>
           </div>

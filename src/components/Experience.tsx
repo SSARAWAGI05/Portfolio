@@ -1,10 +1,13 @@
-import React from 'react';
-import { Calendar, MapPin, Award, Code, Users, Zap, Trophy } from 'lucide-react';
-import { Download, Github, Mail, ArrowDown, Sparkles, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Code, Users, Zap, Trophy } from 'lucide-react';
+import { ShieldCheck, ExternalLink, Eye, X } from 'lucide-react';
 import type { Experience } from '../types';
 import ScrollReveal from './ScrollReveal';
 
 const ExperienceSection: React.FC = () => {
+  const [hoveredCert, setHoveredCert] = useState<number | null>(null);
+  const [expandedCert, setExpandedCert] = useState<number | null>(null);
+
   const experiences: Experience[] = [
     {
       id: '1',
@@ -21,6 +24,57 @@ const ExperienceSection: React.FC = () => {
       period: 'May 2025 - June 2025',
       description: 'Automated 500+ monthly tax invoices and follow-ups using AI Agents, cutting processing time by 70%.',
       type: 'internship'
+    }
+  ];
+
+  const certificates = [
+    {
+      title: 'Oracle AI Vector Search Certified Professional',
+      organization: 'Oracle',
+      date: 'Issued Sep 2025 · Expires Sep 2027',
+      color: 'from-purple-500 to-pink-500',
+      credentialUrl: 'https://catalog-education.oracle.com/pls/certview/sharebadge?id=197B6A97F7CA79D6C58ED85DF5128A907BFD3D9E70330BB935F9A44CEE0463C1',
+      imageUrl: '/ORACLEAI.jpg'
+    },
+    {
+      title: 'Oracle Cloud Infrastructure 2025 Generative AI Professional',
+      organization: 'Oracle',
+      date: 'Issued Sep 2025 · Expires Sep 2027',
+      color: 'from-blue-500 to-cyan-400',
+      credentialUrl: 'https://catalog-education.oracle.com/pls/certview/sharebadge?id=A3A29B03928BC576216EB78FE5645BDAC3F3C7751D358025F346ED1C2A40F6C3',
+      imageUrl: '/ORACLEV.jpg'
+    },
+    {
+      title: 'AWS Academy Graduate - Generative AI Foundations',
+      organization: 'Amazon Web Services',
+      date: 'Issued Sep 2025',
+      color: 'from-indigo-500 to-violet-500',
+      credentialUrl: 'https://www.credly.com/badges/583fd41f-3e1e-443f-9583-2218e41d250b/public_url',
+      imageUrl: '/AWSGA.jpg'
+    },
+    {
+      title: 'AWS Academy Graduate - AWS Academy Cloud Foundations',
+      organization: 'Amazon Web Services',
+      date: 'Issued Mar 2025',
+      color: 'from-yellow-400 to-orange-500',
+      credentialUrl: 'https://www.credly.com/badges/f0e1f1df-d368-4100-aac6-de0efa2928d3/public_url',
+      imageUrl: '/AWSCF.jpg'
+    },
+    {
+      title: 'AWS Academy Graduate - AWS Academy Machine Learning Foundations',
+      organization: 'Amazon Web Services',
+      date: 'Issued Mar 2025',
+      color: 'from-green-400 to-emerald-500',
+      credentialUrl: 'https://www.credly.com/badges/17bb68ab-c187-4cb4-b957-7bb5369221b4/public_url',
+      imageUrl: '/AWS_Academy_Graduate___AWS_Academy_Machine_Learning_Foundations_Badge20250906-29-14cnhx.jpg'
+    },
+    {
+      title: 'NPTEL Java Programming Certification',
+      organization: 'NPTEL',
+      date: 'Issued Nov 2024',
+      color: 'from-red-400 to-pink-600',
+      credentialUrl: 'https://archive.nptel.ac.in/content/noc/NOC24/SEM2/Ecertificates/106/noc24-cs105/Course/NPTEL24CS105S135250158804275781.pdf',
+      imageUrl: '/NPTEL.jpg'
     }
   ];
 
@@ -147,54 +201,58 @@ const ExperienceSection: React.FC = () => {
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: 'Oracle AI Vector Search Certified Professional',
-                  organization: 'Oracle',
-                  date: 'Issued Sep 2025 · Expires Sep 2027',
-                  color: 'from-purple-500 to-pink-500'
-                },
-                {
-                  title: 'Oracle Cloud Infrastructure 2025 Generative AI Professional',
-                  organization: 'Oracle',
-                  date: 'Issued Sep 2025 · Expires Sep 2027',
-                  color: 'from-blue-500 to-cyan-400'
-                },
-                {
-                  title: 'AWS Academy Graduate - Generative AI Foundations',
-                  organization: 'Amazon Web Services',
-                  date: 'Issued Sep 2025',
-                  color: 'from-indigo-500 to-violet-500'
-                },
-                {
-                  title: 'AWS Academy Graduate - AWS Academy Cloud Foundations',
-                  organization: 'Amazon Web Services',
-                  date: 'Issued Mar 2025',
-                  color: 'from-yellow-400 to-orange-500'
-                },
-                {
-                  title: 'AWS Academy Graduate - AWS Academy Machine Learning Foundations',
-                  organization: 'Amazon Web Services',
-                  date: 'Issued Mar 2025',
-                  color: 'from-green-400 to-emerald-500'
-                },
-                {
-                  title: 'NPTEL Java Programming Certification',
-                  organization: 'NPTEL',
-                  date: 'Issued Nov 2024',
-                  color: 'from-red-400 to-pink-600'
-                }
-              ].map((cert, index) => (
+              {certificates.map((cert, index) => (
                 <div
                   key={index}
-                  className="relative bg-void-800/40 backdrop-blur-xl border border-void-600 rounded-2xl p-6 shadow-lg shadow-black/30 hover:shadow-2xl hover:shadow-neon-500/20 transition-all duration-200 transform hover:-translate-y-2 hover:scale-105 group"
+                  className="relative bg-void-800/40 backdrop-blur-xl border border-void-600 rounded-2xl p-6 shadow-lg shadow-black/30 hover:shadow-2xl hover:shadow-neon-500/20 transition-all duration-200 transform hover:-translate-y-2 hover:scale-105 group overflow-hidden"
                   style={{ animationDelay: `${index * 120}ms` }}
+                  onMouseEnter={() => setHoveredCert(index)}
+                  onMouseLeave={() => setHoveredCert(null)}
                 >
                   {/* Gradient Header Bar */}
                   <div className={`absolute inset-x-0 top-0 h-1 rounded-t-2xl bg-gradient-to-r ${cert.color}`} />
 
+                  {/* Certificate Image Preview Overlay - Only shows on hover */}
+                  <div className={`absolute inset-0 bg-void-900/95 backdrop-blur-sm rounded-2xl transition-all duration-300 ${
+                    hoveredCert === index ? 'opacity-100 visible' : 'opacity-0 invisible'
+                  } flex items-center justify-center z-20`}>
+                    <div className="text-center p-4">
+                      <div 
+                        className="w-64 h-40 bg-void-700/30 rounded-lg border-2 border-neon-500/50 mb-4 flex items-center justify-center overflow-hidden cursor-pointer"
+                        onClick={() => setExpandedCert(index)}
+                      >
+                        <img 
+                          src={cert.imageUrl} 
+                          alt={`${cert.title} Certificate`}
+                          className="w-full h-full object-contain rounded-lg"
+                          onError={(e) => {
+                            // Show fallback if image fails to load
+                            const target = e.currentTarget;
+                            target.style.display = 'none';
+                            const fallback = target.nextElementSibling;
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
+                        />
+                        {/* Fallback content */}
+                        <div className="text-center hidden flex-col items-center justify-center">
+                          <Eye className="w-8 h-8 text-neon-400 mx-auto mb-2" />
+                          <p className="text-neon-400 text-xs font-matrix">Certificate Preview</p>
+                          <p className="text-gray-400 text-xs font-matrix mt-1">Loading...</p>
+                        </div>
+                      </div>
+                      <p className="text-white text-sm font-cyber mb-2">{cert.title}</p>
+                      <p className="text-gray-400 text-xs font-matrix">{cert.organization}</p>
+                      <button 
+                        className="mt-3 px-3 py-1 text-xs bg-void-700 text-neon-400 rounded border border-neon-500/30 hover:bg-neon-500/10 transition-colors"
+                        onClick={() => setExpandedCert(index)}
+                      >
+                        Click to expand
+                      </button>
+                    </div>
+                  </div>
+
                   {/* Icon + Date */}
-                  <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between mb-6 relative z-10">
                     <div className={`p-3 bg-gradient-to-r ${cert.color} rounded-xl shadow-md group-hover:scale-110 transition-transform`}>
                       <ShieldCheck className="w-6 h-6 text-white" />
                     </div>
@@ -204,14 +262,28 @@ const ExperienceSection: React.FC = () => {
                   </div>
 
                   {/* Title */}
-                  <h4 className="font-semibold text-lg text-white mb-2 leading-snug group-hover:text-neon-400 transition-colors font-cyber">
+                  <h4 className="font-semibold text-lg text-white mb-2 leading-snug group-hover:text-neon-400 transition-colors font-cyber relative z-10">
                     {cert.title}
                   </h4>
 
                   {/* Organization */}
-                  <p className="text-gray-400 text-sm font-matrix">
+                  <p className="text-gray-400 text-sm font-matrix mb-4 relative z-10">
                     {cert.organization}
                   </p>
+
+                  {/* Check Credentials Button */}
+                  <div className="relative z-10">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(cert.credentialUrl, '_blank');
+                      }}
+                      className={`w-full px-4 py-2 bg-gradient-to-r ${cert.color} text-white text-sm font-matrix rounded-lg hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 hover:scale-105`}
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      VERIFY CREDENTIALS
+                    </button>
+                  </div>
 
                   {/* Footer Glow */}
                   <div className={`absolute bottom-0 inset-x-0 h-1 rounded-b-2xl bg-gradient-to-r ${cert.color} opacity-60`} />
@@ -220,6 +292,62 @@ const ExperienceSection: React.FC = () => {
             </div>
           </div>
         </ScrollReveal>
+
+        {/* Expanded Certificate Modal */}
+        {expandedCert !== null && (
+          <div className="fixed inset-0 bg-void-900/95 backdrop-blur-xl z-50 flex items-center justify-center p-4" onClick={() => setExpandedCert(null)}>
+            <div className="relative max-w-4xl max-h-full bg-void-800 rounded-2xl border border-neon-500/30 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+              <button 
+                className="absolute top-4 right-4 z-50 p-2 bg-void-700 rounded-full text-neon-400 hover:bg-neon-500/20 transition-colors"
+                onClick={() => setExpandedCert(null)}
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <div className="p-6 max-h-[80vh] overflow-auto">
+                <h3 className="text-2xl font-bold text-white mb-2 font-cyber text-center">
+                  {certificates[expandedCert].title}
+                </h3>
+                <p className="text-gray-400 text-sm font-matrix mb-6 text-center">
+                  {certificates[expandedCert].organization}
+                </p>
+                <div className="bg-void-700/30 rounded-lg border-2 border-neon-500/30 p-2 flex justify-center">
+                  <img 
+                    src={certificates[expandedCert].imageUrl} 
+                    alt={`${certificates[expandedCert].title} Certificate`}
+                    className="max-w-full max-h-[70vh] object-contain rounded"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.style.display = 'none';
+                      const fallback = target.nextElementSibling;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
+                  {/* Fallback content */}
+                  <div className="hidden flex-col items-center justify-center w-full h-64 text-center">
+                    <Eye className="w-12 h-12 text-neon-400 mx-auto mb-4" />
+                    <p className="text-neon-400 text-lg font-matrix">Certificate Image</p>
+                    <p className="text-gray-400 text-sm font-matrix mt-2">Failed to load</p>
+                  </div>
+                </div>
+                <div className="mt-6 flex justify-center gap-4">
+                  <button
+                    onClick={() => window.open(certificates[expandedCert].credentialUrl, '_blank')}
+                    className={`px-6 py-2 bg-gradient-to-r ${certificates[expandedCert].color} text-white rounded-lg hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2`}
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    VERIFY CREDENTIALS
+                  </button>
+                  <button 
+                    className="px-6 py-2 bg-void-700 text-neon-400 rounded-lg border border-neon-500/30 hover:bg-neon-500/10 transition-colors"
+                    onClick={() => setExpandedCert(null)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

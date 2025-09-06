@@ -29,7 +29,7 @@ const AchievementsSection: React.FC = () => {
       issuer: 'IISc Bangalore',
       date: '2025',
       type: 'hackathon',
-      description: 'First place in AI/ML category - Developed an innovative machine learning solution for healthcare diagnostics',
+      description: 'Developed an innovative machine learning solution for healthcare diagnostics',
       featured: false,
       certificateImage: '/Screenshot 2025-09-04 at 9.43.24 PM.png',
       verificationLink: '#'
@@ -40,7 +40,7 @@ const AchievementsSection: React.FC = () => {
       issuer: 'NIT Tiruchirapalli',
       date: '2025',
       type: 'hackathon',
-      description: 'Runner-up position for developing a blockchain-based financial solution',
+      description: 'Runner-up position for developing a real world financial solution',
       featured: true,
       certificateImage: '/Screenshot 2025-09-04 at 9.44.11 PM.png',
       verificationLink: '#'
@@ -51,7 +51,7 @@ const AchievementsSection: React.FC = () => {
       issuer: 'Government of India',
       date: '2024',
       type: 'hackathon',
-      description: 'National level hackathon participant - Smart city solutions track',
+      description: 'Top 50 finalist in SRM - National level hackathon participant - Smart city solutions track',
       certificateImage: '/Screenshot 2025-09-04 at 9.44.55 PM.png',
       verificationLink: '',
       featured: true
@@ -62,16 +62,16 @@ const AchievementsSection: React.FC = () => {
       issuer: 'SRM University',
       date: '2023',
       type: 'hackathon',
-      description: 'Top 10 finalist in cybersecurity category',
+      description: 'College Level Hackathon',
       certificateImage: '/Screenshot 2025-09-04 at 9.45.34 PM.png'
     },
     {
       id: 'ach-005',
       title: 'Pentathon Hackathon',
-      issuer: 'Cyber Security Organization',
+      issuer: 'NextGen-AI',
       date: '2023',
       type: 'hackathon',
-      description: 'Excellence in penetration testing and vulnerability assessment',
+      description: 'Excellence in AIML',
       certificateImage: '/Screenshot 2025-09-04 at 9.46.09 PM.png'
     },
     {

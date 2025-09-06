@@ -55,6 +55,11 @@ function App() {
       placement: "top",
     },
     {
+      target: "#achievements",
+      content: "My  accomplishments and recognitions. 🏆",
+      placement: "top",
+    },
+    {
       target: "#contact",
       content: "📩 Ready to connect? Get in touch with me here!",
       placement: "top",

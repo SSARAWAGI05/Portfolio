@@ -9,32 +9,41 @@ const Projects: React.FC = () => {
   const projects: Project[] = [
     {
       id: '1',
+      title: 'Apex Arena',
+      description: 'An AI battle royale betting game where you wager virtual credits on pre-trained neural network agents competing to survive in a dynamic wilderness—watch them navigate a grid world managing hunger, thirst, and temperature across changing seasons, and win double your bet if your chosen agent outlasts the competition.',
+      techStack: ['Python', 'PyGame', 'PyTorch', 'Deep Q-Networks', 'Reinforcement Learning', 'Multi-Agent Systems'],
+      githubUrl: '#',
+      category: 'AI Apps',
+      imageUrl: 'https://github.com/SSARAWAGI05/ApexArena'
+    },
+    {
+      id: '2',
       title: 'SpendWise',
       description: 'Tracked over 100 expenses using NLP parsing, achieving 98% accuracy in group splits, enabled UPI settlements through QR-based payments in real-world testing, and integrated facial recognition for secure multi-user verification.',
       techStack: ['Python', 'PyTorch', 'Transformers', 'FastAPI', 'React'],
-      githubUrl: '#',
+      githubUrl: 'https://github.com/SSARAWAGI05/SpendWise',
       liveUrl: '#',
       category: 'NLP',
       imageUrl: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=600'
     },
     {
-      id: '2',
+      id: '3',
       title: 'StudyBlitz',
       description: 'Tracked real-time focus and engagement across multiple study sessions using facial and posture cues, summarized over 200 hours of video content with AI while integrating a 24/7 query-resolution chatbot, and gamified learning with 12+ badges, XP milestones, and streak analytics.',
       techStack: ['Python', 'TensorFlow', 'OpenCV', 'CRNN', 'Flask'],
-      githubUrl: '#',
+      githubUrl: 'https://github.com/SSARAWAGI05/YouvaPrashikshan',
       liveUrl: '#',
-      category: 'Computer Vision',
+      category: 'AI Apps',
       imageUrl: 'https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=600'
     },
     {
-      id: '3',
+      id: '4',
       title: 'FaceCheck-IN',
       description: 'An AI-powered facial recognition system that automates attendance by detecting and recognizing faces in live video, instantly marking attendance, and flagging unrecognized individuals for review.',
       techStack: ['Python', 'Scikit-learn', 'Pandas', 'MongoDB', 'Docker'],
       githubUrl: '#',
       category: 'AI Apps',
-      imageUrl: 'https://images.pexels.com/photos/669996/pexels-photo-669996.jpeg?auto=compress&cs=tinysrgb&w=600'
+      imageUrl: 'https://github.com/SSARAWAGI05/FaceCkeckIn'
     }
   ];
 

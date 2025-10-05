@@ -127,10 +127,10 @@ const Hero: React.FC<{ onStartTour?: () => void }> = ({ onStartTour }) => {
                     {/* Animated Subtitle */}
                     <div className="space-y-3">
                       <p className="text-xl lg:text-2xl xl:text-3xl text-neon-400 font-matrix typing-text">
-                         ML_ENGINEER.initialize()
+                         ENGINEER.initialize()
                       </p>
                       <p className="text-base lg:text-lg xl:text-xl text-cyber-300 font-light max-w-2xl lg:max-w-none">
-                        Building AI-Powered Solutions for Tomorrow
+                        Building End to End Solutions for Tomorrow
                       </p>
                     </div>
                   </div>
